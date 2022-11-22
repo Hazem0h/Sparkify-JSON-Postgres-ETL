@@ -1,14 +1,27 @@
 # DROP TABLES
 
-songplay_table_drop = ""
-user_table_drop = ""
-song_table_drop = ""
-artist_table_drop = ""
-time_table_drop = ""
+songplay_table_drop = "DROP TABLE IF EXISTS songplay"
+user_table_drop = "DROP TABLE IF EXISTS user"
+song_table_drop = "DROP TABLE IF EXISTS song"
+artist_table_drop = "DROP TABLE IF EXISTS artist"
+time_table_drop = "DROP TABLE IF EXISTS time_table"
 
 # CREATE TABLES
 
+# TODO is the songplay a primary Key? What are the datatypes of this table?
+# TODO is the level column necessary? I don't think it is.
 songplay_table_create = ("""
+                         CREATE TABLE IF NOT EXISTS songplay(
+                             songplay_id INT,
+                             start_time FLOAT,
+                             user_id INT references user(user_id),
+                             level INT,
+                             song_id INT references song(song_id),
+                             artist_id INT references artist(artist_id),
+                             session_id INT,
+                             location VARCHAR,
+                             user_agent VARCHAR
+                         );
 """)
 
 user_table_create = ("""
@@ -42,7 +55,17 @@ song_table_create = ("""
                      );
 """)
 
+# TODO I'm not sure about this table's datatypes, or even its existence
+# TODO Maybe we need a lot of constraints here
 time_table_create = ("""
+                     CREATE TABLE IF NOT EXISTS time_table(
+                         start_time FLOAT,
+                         hour INT,
+                         day INT,
+                         week INT,
+                         year INT,
+                         weekday INT
+                     );
 """)
 
 # INSERT RECORDS
