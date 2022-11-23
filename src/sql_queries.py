@@ -1,10 +1,10 @@
 # DROP TABLES
 
-songplay_table_drop = "DROP TABLE IF EXISTS songplay"
-user_table_drop = "DROP TABLE IF EXISTS user"
-song_table_drop = "DROP TABLE IF EXISTS song"
-artist_table_drop = "DROP TABLE IF EXISTS artist"
-time_table_drop = "DROP TABLE IF EXISTS time_table"
+songplay_table_drop = "DROP TABLE IF EXISTS songplay;"
+user_table_drop = "DROP TABLE IF EXISTS user_table;"
+song_table_drop = "DROP TABLE IF EXISTS song;"
+artist_table_drop = "DROP TABLE IF EXISTS artist;"
+time_table_drop = "DROP TABLE IF EXISTS time_table;"
 
 # CREATE TABLES
 
@@ -14,7 +14,7 @@ songplay_table_create = ("""
                          CREATE TABLE IF NOT EXISTS songplay(
                              songplay_id INT,
                              start_time FLOAT,
-                             user_id VARCHAR references user(user_id),
+                             user_id VARCHAR references user_table(user_id),
                              level INT,
                              song_id VARCHAR references song(song_id),
                              artist_id VARCHAR references artist(artist_id),
@@ -25,7 +25,7 @@ songplay_table_create = ("""
 """)
 
 user_table_create = ("""
-                     CREATE TABLE IF NOT EXISTS user(
+                     CREATE TABLE IF NOT EXISTS user_table(
                          user_id VARCHAR PRIMARY KEY,
                          first_name VARCHAR,
                          last_name VARCHAR,
@@ -49,7 +49,7 @@ song_table_create = ("""
                      CREATE TABLE IF NOT EXISTS song(
                          song_id VARCHAR PRIMARY KEY,
                          title VARCHAR,
-                         artist_id FLOAT references artist(artist_id),
+                         artist_id VARCHAR references artist(artist_id),
                          year INT,
                          duration FLOAT
                      );
@@ -71,9 +71,12 @@ time_table_create = ("""
 # INSERT RECORDS
 
 songplay_table_insert = ("""
-""")
+                         INSERT INTO songplay (songplay_id, start_time, user_id, level, song_id, artist_id, session_id, location VARCHAR, user_agent)
+                         VALUES (%s, %f, %s, %d, %s, %s, %s, %s, %s)
+                         """)
 
 user_table_insert = ("""
+
 """)
 
 song_table_insert = ("""
@@ -93,5 +96,5 @@ song_select = ("""
 
 # QUERY LISTS
 
-create_table_queries = [songplay_table_create, user_table_create, song_table_create, artist_table_create, time_table_create]
-drop_table_queries = [songplay_table_drop, user_table_drop, song_table_drop, artist_table_drop, time_table_drop]
+create_table_queries = [user_table_create, artist_table_create, song_table_create, time_table_create, songplay_table_create]
+drop_table_queries = [user_table_drop, artist_table_drop, song_table_drop, time_table_drop, songplay_table_drop]

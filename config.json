@@ -1,0 +1,7 @@
+{
+    "host":"localhost",
+    "defaultdb":"postgres",
+    "dbname":"sparkify",
+    "username":"postgres",
+    "password":"12345678"
+}

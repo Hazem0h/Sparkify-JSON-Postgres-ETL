@@ -1,15 +1,24 @@
 import psycopg2
-from sql_queries import create_table_queries, drop_table_queries
+import json
+from src.sql_queries import create_table_queries, drop_table_queries
 
+
+    
 
 def create_database():
     """
     - Creates and connects to the sparkifydb
     - Returns the connection and cursor to sparkifydb
     """
+    with open("../config.json") as f:
+        config = json.load(f)
     
     # connect to default database
-    conn = psycopg2.connect("host=127.0.0.1 dbname=studentdb user=student password=student")
+    #conn = psycopg2.connect("host=127.0.0.1 dbname=studentdb user=student password=student")
+    conn = psycopg2.connect(host = config["host"],
+                            dbname = config["defaultdb"],
+                            user = config["username"],
+                            password = config["password"])
     conn.set_session(autocommit=True)
     cur = conn.cursor()
     
@@ -21,9 +30,11 @@ def create_database():
     conn.close()    
     
     # connect to sparkify database
-    conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
+    conn = psycopg2.connect(host = config["host"],
+                            dbname = config["dbname"],
+                            user = config["username"],
+                            password = config["password"])
     cur = conn.cursor()
-    
     return cur, conn
 
 
@@ -63,7 +74,9 @@ def main():
     drop_tables(cur, conn)
     create_tables(cur, conn)
 
+    cur.close()
     conn.close()
+    
 
 
 if __name__ == "__main__":
