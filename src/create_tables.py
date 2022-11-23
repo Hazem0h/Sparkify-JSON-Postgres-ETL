@@ -1,6 +1,6 @@
 import psycopg2
 import json
-from src.sql_queries import create_table_queries, drop_table_queries
+from sql_queries import create_table_queries, drop_table_queries
 
 
     
@@ -23,8 +23,8 @@ def create_database():
     cur = conn.cursor()
     
     # create sparkify database with UTF8 encoding
-    cur.execute("DROP DATABASE IF EXISTS sparkifydb")
-    cur.execute("CREATE DATABASE sparkifydb WITH ENCODING 'utf8' TEMPLATE template0")
+    cur.execute(f"DROP DATABASE IF EXISTS {config['dbname']}")
+    cur.execute(f"CREATE DATABASE {config['dbname']} WITH ENCODING 'utf8' TEMPLATE template0")
 
     # close connection to default database
     conn.close()    
