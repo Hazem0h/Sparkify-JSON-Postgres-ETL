@@ -14,10 +14,10 @@ songplay_table_create = ("""
                          CREATE TABLE IF NOT EXISTS songplay(
                              songplay_id INT,
                              start_time FLOAT,
-                             user_id INT references user(user_id),
+                             user_id VARCHAR references user(user_id),
                              level INT,
-                             song_id INT references song(song_id),
-                             artist_id INT references artist(artist_id),
+                             song_id VARCHAR references song(song_id),
+                             artist_id VARCHAR references artist(artist_id),
                              session_id INT,
                              location VARCHAR,
                              user_agent VARCHAR
@@ -26,7 +26,7 @@ songplay_table_create = ("""
 
 user_table_create = ("""
                      CREATE TABLE IF NOT EXISTS user(
-                         user_id INT PRIMARY KEY,
+                         user_id VARCHAR PRIMARY KEY,
                          first_name VARCHAR,
                          last_name VARCHAR,
                          gender VARCHAR(1),
@@ -37,7 +37,7 @@ user_table_create = ("""
 
 artist_table_create = ("""
                        CREATE TABLE IF NOT EXISTS artist(
-                           artist_id INT PRIMARY KEY,
+                           artist_id VARCHAR PRIMARY KEY,
                            name VARCHAR,
                            location VARCHAR,
                            latitude FLOAT,
@@ -47,9 +47,9 @@ artist_table_create = ("""
 
 song_table_create = ("""
                      CREATE TABLE IF NOT EXISTS song(
-                         song_id INT PRIMARY KEY,
+                         song_id VARCHAR PRIMARY KEY,
                          title VARCHAR,
-                         artist_id INT references artist(artist_id),
+                         artist_id FLOAT references artist(artist_id),
                          year INT,
                          duration FLOAT
                      );
