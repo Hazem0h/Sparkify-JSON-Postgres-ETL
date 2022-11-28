@@ -7,7 +7,7 @@ ETL stands for (Extract, Transform, and Load). The essence is
 * We can then do some preprocessing (this can be doing calculations, or changing the format of some data, ...) **(*Transform*)**
 * Then, we load the data into some destination (in our case, the postgres Database) **(*Load*)**
 
-<center> <img src = "../images/ETL-JSON-PG.jpg" width = 500></center>
+<img src = "../images/ETL-JSON-PG.jpg" width = 500>
 
 
 ## How will we do it?
