@@ -27,10 +27,10 @@ songplay_table_create = ("""
 user_table_create = ("""
                      CREATE TABLE IF NOT EXISTS user_table(
                          user_id VARCHAR PRIMARY KEY,
-                         first_name VARCHAR,
-                         last_name VARCHAR,
+                         firstname VARCHAR,
+                         lastname VARCHAR,
                          gender VARCHAR(1),
-                         level INT
+                         userlevel VARCHAR
                      );
 """)
 
@@ -55,16 +55,17 @@ song_table_create = ("""
                      );
 """)
 
-# TODO I'm not sure about this table's datatypes, or even its existence
-# TODO Maybe we need a lot of constraints here
+
+# Note: start time is the UTC timestamp in milliseconds, like 1541106106796. For that, a regular int won't suffice. We need a "BIGINT"
 time_table_create = ("""
                      CREATE TABLE IF NOT EXISTS time_table(
-                         start_time FLOAT,
+                         start_time BIGINT,
                          hour INT,
                          day INT,
+                         weekday INT,
                          week INT,
-                         year INT,
-                         weekday INT
+                         month INT,
+                         year INT
                      );
 """)
 
@@ -72,25 +73,34 @@ time_table_create = ("""
 
 songplay_table_insert = ("""
                          INSERT INTO songplay (songplay_id, start_time, user_id, level, song_id, artist_id, session_id, location VARCHAR, user_agent)
-                         VALUES (%s, %s, %s, %d, %s, %s, %s, %s, %s)
+                         VALUES (%s, %s, %s, %d, %s, %s, %s, %s, %s);
                          """)
 
 user_table_insert = ("""
+                     INSERT INTO user_table(user_id, firstname, lastname, gender, userlevel)
+                     VALUES(%s, %s, %s, %s, %s)
+                     ON CONFLICT (user_id) DO UPDATE SET
+                     firstname = EXCLUDED.firstname,
+                     lastname = EXCLUDED.lastname,
+                     gender = EXCLUDED.gender,
+                     userlevel = EXCLUDED.userlevel;
 
 """)
 
 song_table_insert = ("""
                      INSERT INTO song (song_id, title, artist_id, year, duration)
-                     VALUES (%s, %s, %s, %s, %s)
+                     VALUES (%s, %s, %s, %s, %s);
 """)
 
 artist_table_insert = ("""
                        INSERT INTO artist(artist_id, name, location, latitude, longitude)
-                       VALUES(%s, %s, %s, %s, %s)
+                       VALUES(%s, %s, %s, %s, %s);
 """)
 
 
 time_table_insert = ("""
+                     INSERT INTO time_table(start_time, hour, day, weekday, week, month, year)
+                     VALUES(%s, %s, %s, %s, %s, %s, %s);
 """)
 
 # FIND SONGS
