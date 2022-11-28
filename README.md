@@ -15,7 +15,7 @@ Using python, we can
 * Read the JSON files (Extract)
 * Do our preprocessing (Transform)
 * Interact with the database, using a database driver directly, like (psycopg2), or using a driver, with an object relational Model (ORM) like sqlalchemy
-<div style="align:center"> <img src = "../images/ETL-with-python.jpg" width = 50%></div>
+<div align = center> <img src = "images/ETL-with-python.jpg" width = 75%></div>
 
 
 ## What's our data about?
@@ -24,7 +24,7 @@ Our data is a simulation of a music streaming app. The JSON files are split into
 * The other directory `log_data` holds json files about Which songs were played, by whom, and at what time instances.
 
 This can be shown in the following image:
-<center><img src = "../images/json-data-content.jpg" width = 50%></center>
+<div align = center><img src = "images/json-data-content.jpg" width = 75%></div>
 
 
 ## Relational Database Schema
@@ -33,7 +33,7 @@ There are many schemas that can satisfy these requirements. In this project we w
 Designing the schema is outside the scope of this project, but if you want to learn more, you would need to study (database normalisation, denormalization and the pros and cons of different approaches towards schema design, such as star schema, snowflake schema, and others). 
 
 So, our tables will can look like this
-<center><img src = "../images/schema.png" width = 50%> </center>
+<div align = center><img src = "images/schema.png" width = 75%> </div>
 
 Where,
 * `user` table holds info about the user `(Dimension Table)`
