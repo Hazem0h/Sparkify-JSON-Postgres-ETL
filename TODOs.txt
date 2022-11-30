@@ -1,0 +1,2 @@
+* For the year column, where `year` is set to 0. Do we change it to NULL in the database, or do we keep it as is?
+

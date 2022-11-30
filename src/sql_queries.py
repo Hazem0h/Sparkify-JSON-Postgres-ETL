@@ -40,8 +40,8 @@ artist_table_create = ("""
                            artist_id VARCHAR PRIMARY KEY,
                            name VARCHAR,
                            location VARCHAR,
-                           latitude FLOAT,
-                           longitude FLOAT
+                           longitude FLOAT,
+                           latitude FLOAT
                        );
 """)
 
@@ -92,9 +92,21 @@ song_table_insert = ("""
                      VALUES (%s, %s, %s, %s, %s);
 """)
 
+"""
+Since artists exist across multiple entries in the JSON files, it can be the case that in one file there's missing data, while in another 
+the data is there. As such, I opted to use the COALESCE function to keep the first non-null value.
+In this query, I use COALESCE, which returns the first non-null in the arguments. If there's a conflicting 
+item to be inserted, and it turns out to update pre-existing null value, then take it. If not, stick with the old value
+"""
 artist_table_insert = ("""
-                       INSERT INTO artist(artist_id, name, location, latitude, longitude)
-                       VALUES(%s, %s, %s, %s, %s);
+                       INSERT INTO artist(artist_id, name, location, longitude, latitude)
+                       VALUES(%s, %s, %s, %s, %s)
+                       ON CONFLICT(artist_id)
+                       DO UPDATE SET
+                       longitude = COALESCE(artist.longitude, EXCLUDED.longitude),
+                       latitude = COALESCE(artist.latitude, EXCLUDED.latitude),
+                       name = COALESCE(artist.name, EXCLUDED.name),
+                       location = COALESCE(artist.location, EXCLUDED.location);
 """)
 
 
