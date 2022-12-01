@@ -65,12 +65,12 @@ Where,
 │   └── test.ipynb
 └── structure.txt
 ```
-#### The `data` Folder
+### The `data` Folder
 The Data folder has 2 subcategories,
 * `raw` folder, which contains the raw data for `song_files` and `log_files` as `JSON` files
 * `cleaned` folder which containes the data after extraction and transformation (preprocessing) as `csv` files
 
-#### The `src` Folder
+### The `src` Folder
 Our source code.
 * `sql_queries.py` contains all our SQL queries that we will use for creating/dropping tables, and inserting data.
 * `create_tables.py` is like the reset script. It drops the tables if they exist, and creates fresh empty tables.
@@ -79,13 +79,13 @@ Our source code.
 * `loading_notebook.ipynb` is a notebook in which we try to insert data into our tables, and see if we will face any issues.
 * `load_pg.py` is the script version of loading the data into the Postgres Database
 
-#### The `config.json` file
+### The `config.json` file
 * This file contains the credentials and configuration data to connect to a postgres Database.
 * I put it in a separate file to make it easier to change the connection settings in one place without having to change it within the code.
 
 Obviously, you will have to change this file's contents to run it on your machine, or connect to a remote Postgres database server
 
-#### The `requirements.txt` file
+### The `requirements.txt` file
 It lists the python version I used in this project, as well as the packages and their versions.
 
 This makes it easier to install the needed packages directly, and (hopefully) without worrying much about package version mismatch.
