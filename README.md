@@ -1,4 +1,4 @@
-## Our objective in a nutshell
+# Our objective in a nutshell
 We have some data scattered around in JSON files. We want to reorganise and store it in a relational database.
 
 ## What is ETL?
@@ -45,3 +45,23 @@ Where,
 ## Which data from which source
 * The JSON files concerned with `song data` will be used to fill the `song` and `artist` tables
 * The JSON files concerned with `log data` will be used to fill the `user`, `time` and `songplay` tables
+
+# File Structure
+```
+├── config.json
+├── data
+│   ├── cleaned
+│   └── raw
+├── images
+├── requirements.txt
+├── src
+│   ├── cleaning.ipynb
+│   ├── create_tables.py
+│   ├── etl.py
+│   ├── extract_transform.py
+│   ├── load_pg.py
+│   ├── loading_notebook.ipynb
+│   ├── sql_queries.py
+│   └── test.ipynb
+└── structure.txt
+```
