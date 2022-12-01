@@ -7,17 +7,14 @@ artist_table_drop = "DROP TABLE IF EXISTS artist;"
 time_table_drop = "DROP TABLE IF EXISTS time_table;"
 
 # CREATE TABLES
-
-# TODO is the songplay a primary Key? What are the datatypes of this table?
-# TODO is the level column necessary? I don't think it is.
 songplay_table_create = ("""
                          CREATE TABLE IF NOT EXISTS songplay(
-                             songplay_id INT,
-                             start_time FLOAT,
-                             user_id VARCHAR references user_table(user_id),
-                             level INT,
-                             song_id VARCHAR,
-                             artist_id VARCHAR,
+                             songplay_id SERIAL PRIMARY KEY,
+                             start_time BIGINT references time_table(start_time),
+                             user_id INT references user_table(user_id),
+                             userlevel VARCHAR,
+                             song_id VARCHAR references song(song_id),
+                             artist_id VARCHAR references artist(artist_id),
                              session_id INT,
                              location VARCHAR,
                              user_agent VARCHAR
@@ -26,7 +23,7 @@ songplay_table_create = ("""
 
 user_table_create = ("""
                      CREATE TABLE IF NOT EXISTS user_table(
-                         user_id VARCHAR PRIMARY KEY,
+                         user_id INT PRIMARY KEY,
                          firstname VARCHAR,
                          lastname VARCHAR,
                          gender VARCHAR(1),
@@ -49,7 +46,7 @@ song_table_create = ("""
                      CREATE TABLE IF NOT EXISTS song(
                          song_id VARCHAR PRIMARY KEY,
                          title VARCHAR,
-                         artist_id VARCHAR,
+                         artist_id VARCHAR references artist(artist_id),
                          year INT,
                          duration FLOAT
                      );
@@ -59,7 +56,7 @@ song_table_create = ("""
 # Note: start time is the UTC timestamp in milliseconds, like 1541106106796. For that, a regular int won't suffice. We need a "BIGINT"
 time_table_create = ("""
                      CREATE TABLE IF NOT EXISTS time_table(
-                         start_time BIGINT,
+                         start_time BIGINT PRIMARY KEY,
                          hour INT,
                          day INT,
                          weekday INT,
@@ -72,18 +69,21 @@ time_table_create = ("""
 # INSERT RECORDS
 
 songplay_table_insert = ("""
-                         INSERT INTO songplay (songplay_id, start_time, user_id, level, song_id, artist_id, session_id, location VARCHAR, user_agent)
-                         VALUES (%s, %s, %s, %d, %s, %s, %s, %s, %s);
+                         INSERT INTO songplay (start_time, user_id, userlevel, song_id, artist_id, session_id, location, user_agent)
+                         VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
                          """)
 
+"""
+Note: Users can change their level (paid or free). I will that they are also allowed to update their other data as well
+"""
 user_table_insert = ("""
                      INSERT INTO user_table(user_id, firstname, lastname, gender, userlevel)
                      VALUES(%s, %s, %s, %s, %s)
                      ON CONFLICT (user_id) DO UPDATE SET
-                     firstname = EXCLUDED.firstname,
-                     lastname = EXCLUDED.lastname,
-                     gender = EXCLUDED.gender,
-                     userlevel = EXCLUDED.userlevel;
+                     firstname = COALESCE(EXCLUDED.firstname, user_table.firstname),
+                     lastname = COALESCE(EXCLUDED.lastname, user_table.lastname),
+                     gender = COALESCE(EXCLUDED.gender, user_table.gender),
+                     userlevel = COALESCE(EXCLUDED.userlevel, user_table.userlevel);
 
 """)
 
@@ -112,12 +112,16 @@ artist_table_insert = ("""
 
 time_table_insert = ("""
                      INSERT INTO time_table(start_time, hour, day, weekday, week, month, year)
-                     VALUES(%s, %s, %s, %s, %s, %s, %s);
+                     VALUES(%s, %s, %s, %s, %s, %s, %s)
+                     ON CONFLICT DO NOTHING;
 """)
 
 # FIND SONGS
-
 song_select = ("""
+               SELECT song.song_id, artist.artist_id
+               FROM song
+               JOIN artist ON song.artist_id = artist.artist_id
+               WHERE %s = song.title AND %s = artist.name AND %s = song.duration;
 """)
 
 # QUERY LISTS

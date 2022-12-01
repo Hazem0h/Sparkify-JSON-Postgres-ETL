@@ -1,0 +1,5 @@
+python
+numpy
+pandas
+psycopg2
+ipython-sql

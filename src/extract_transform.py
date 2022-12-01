@@ -78,17 +78,6 @@ def save_users_data(df_logs: pd.DataFrame, path = "../data/cleaned/users.csv", i
     df_users = grouped[user_cols]
     df_users.to_csv(path, index = index)
 
-def save_songplay_data(df_logs: pd.DataFrame):
-    """Saves songplay data into a csv file
-    """
-    songplay_cols = ["sessionId", "ts", "userId", "level", "location", "userAgent"]
-    df_songplays = df_logs[df_logs["page"] == "NextSong"].copy()
-    df_songplays = df_songplays[songplay_cols]
-    df_songplays.to_csv("../data/cleaned/songplays.csv", index = False)
-
-def save_time_data(time_data_dict: Dict[str, pd.Series], path = "../data/cleaned/time.csv", index = False):
-    time_df = pd.DataFrame(time_data_dict)
-    time_df.to_csv(path, index = index)
 
 def extract_time_data(df_logs: pd.DataFrame) -> Dict[str, pd.Series]:
     """Extracts date/time information from the dataframe (the hour, the day, the week, the month,...)
@@ -110,6 +99,19 @@ def extract_time_data(df_logs: pd.DataFrame) -> Dict[str, pd.Series]:
         "year": year
     }
     return time_data_dict
+
+def save_time_data(time_data_dict: Dict[str, pd.Series], path = "../data/cleaned/time.csv", index = False):
+    time_df = pd.DataFrame(time_data_dict)
+    time_df.drop_duplicates(inplace = True)
+    time_df.to_csv(path, index = index)
+
+def save_songplay_data(df_logs: pd.DataFrame):
+    """Saves songplay data into a csv file
+    """
+    songplay_cols = ["sessionId", "ts", "song", "length", "artist", "userId", "level", "location", "userAgent"]
+    df_songplays = df_logs[df_logs["page"] == "NextSong"].copy()
+    df_songplays = df_songplays[songplay_cols]
+    df_songplays.to_csv("../data/cleaned/songplays.csv", index = False)
 
 def extract_and_clean():
     """Extracts the data from the JSON files, transforms them, and saves them into csv files.
