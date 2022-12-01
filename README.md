@@ -54,16 +54,15 @@ Where,
 │   └── raw
 ├── images
 ├── requirements.txt
-├── src
-│   ├── extract_transform_notebook.ipynb
-│   ├── create_tables.py
-│   ├── etl.py
-│   ├── extract_transform.py
-│   ├── load_pg.py
-│   ├── loading_notebook.ipynb
-│   ├── sql_queries.py
-│   └── test.ipynb
-└── structure.txt
+|__ src
+   ├── extract_transform_notebook.ipynb
+   ├── create_tables.py
+   ├── etl.py
+   ├── extract_transform.py
+   ├── load_pg.py
+   ├── loading_notebook.ipynb
+   ├── sql_queries.py
+   └── test.ipynb
 ```
 ### The `data` Folder
 The Data folder has 2 subcategories,
@@ -78,6 +77,8 @@ Our source code.
 * `extract_transform.py` is the script version of the previous notebook
 * `loading_notebook.ipynb` is a notebook in which we try to insert data into our tables, and see if we will face any issues.
 * `load_pg.py` is the script version of loading the data into the Postgres Database
+* `etl.py` The main script. It does the ETL process from A to Z by calling other modules
+* `test.ipynb` A sanity check notebook where you can view the data after insertion.
 
 ### The `config.json` file
 * This file contains the credentials and configuration data to connect to a postgres Database.
@@ -90,3 +91,21 @@ It lists the python version I used in this project, as well as the packages and 
 
 This makes it easier to install the needed packages directly, and (hopefully) without worrying much about package version mismatch.
 
+# How To Run
+1. Make sure you have access to a postgres database (either locally or a remote server). It's easy to install Postgres on your device if you don't have it.
+2. Clone the repository
+3. Modify the `config.json` file to match your configuration of postgres
+4. Install the packages in the `requirements.txt` file via `pip install -r requirements.txt`
+5. Run `etl.py`
+6. You can do a sanity check using `test.ipynb`
+
+* The two notebooks `extract_transform_notebook.ipynb` and `loading_notebook.ipynb` go through the thought process that culminates into the python `etl.py`, `extract_transform.py` and `load_pg.py` scripts.
+
+# Do It Yourself! It's your turn.
+This is a project for the Data Engineering Nanodegree, offered by Udacity. The project has some starter code to guide through the process `project_template.zip`. 
+
+If you wish to implement this yourself, the code will be a good place start. 
+
+Feel free to experiment. You don't have to stick too obssessively to the provided code (I didn't).
+
+Enjoy :)
