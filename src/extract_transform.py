@@ -101,6 +101,8 @@ def extract_time_data(df_logs: pd.DataFrame) -> Dict[str, pd.Series]:
     return time_data_dict
 
 def save_time_data(time_data_dict: Dict[str, pd.Series], path = "../data/cleaned/time.csv", index = False):
+    """Saves the time data into a csv file
+    """
     time_df = pd.DataFrame(time_data_dict)
     time_df.drop_duplicates(inplace = True)
     time_df.to_csv(path, index = index)
@@ -113,7 +115,7 @@ def save_songplay_data(df_logs: pd.DataFrame):
     df_songplays = df_songplays[songplay_cols]
     df_songplays.to_csv("../data/cleaned/songplays.csv", index = False)
 
-def extract_and_clean():
+def extract_and_transform():
     """Extracts the data from the JSON files, transforms them, and saves them into csv files.
     """
     #### Songs Data
@@ -145,4 +147,4 @@ if __name__ == "__main__":
     if not os.path.exists("../data/cleaned"):
         os.makedirs("../data/cleaned")
         
-    extract_and_clean()
+    extract_and_transform()
