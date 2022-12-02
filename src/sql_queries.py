@@ -10,8 +10,8 @@ time_table_drop = "DROP TABLE IF EXISTS time_table;"
 songplay_table_create = ("""
                          CREATE TABLE IF NOT EXISTS songplay(
                              songplay_id SERIAL PRIMARY KEY,
-                             start_time BIGINT references time_table(start_time),
-                             user_id INT references user_table(user_id),
+                             start_time BIGINT NOT NULL references time_table(start_time),
+                             user_id INT NOT NULL references user_table(user_id),
                              userlevel VARCHAR,
                              song_id VARCHAR references song(song_id),
                              artist_id VARCHAR references artist(artist_id),
@@ -35,7 +35,7 @@ user_table_create = ("""
 artist_table_create = ("""
                        CREATE TABLE IF NOT EXISTS artist(
                            artist_id VARCHAR PRIMARY KEY,
-                           name VARCHAR,
+                           name VARCHAR NOT NULL,
                            location VARCHAR,
                            longitude FLOAT,
                            latitude FLOAT
@@ -45,10 +45,10 @@ artist_table_create = ("""
 song_table_create = ("""
                      CREATE TABLE IF NOT EXISTS song(
                          song_id VARCHAR PRIMARY KEY,
-                         title VARCHAR,
-                         artist_id VARCHAR references artist(artist_id),
+                         title VARCHAR NOT NULL,
+                         artist_id VARCHAR NOT NULL references artist(artist_id),
                          year INT,
-                         duration FLOAT
+                         duration FLOAT NOT NULL
                      );
 """)
 
@@ -70,7 +70,8 @@ time_table_create = ("""
 
 songplay_table_insert = ("""
                          INSERT INTO songplay (start_time, user_id, userlevel, song_id, artist_id, session_id, location, user_agent)
-                         VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
+                         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                         ON CONFLICT DO NOTHING;
                          """)
 
 """
@@ -89,7 +90,9 @@ user_table_insert = ("""
 
 song_table_insert = ("""
                      INSERT INTO song (song_id, title, artist_id, year, duration)
-                     VALUES (%s, %s, %s, %s, %s);
+                     VALUES (%s, %s, %s, %s, %s)
+                     ON CONFLICT DO NOTHING;
+                     
 """)
 
 """

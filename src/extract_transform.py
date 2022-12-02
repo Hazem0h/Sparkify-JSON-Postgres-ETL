@@ -58,7 +58,7 @@ def save_artist_data(df_songs_artists: pd.DataFrame, path = "../data/cleaned/art
 def save_songs_data(df_songs_artists: pd.DataFrame, path = "../data/cleaned/songs.csv", index = False):
     """Saves the songs data
     """
-    song_columns = ["song_id", "title", "artist_id", "duration", "year"]
+    song_columns = ["song_id", "title", "artist_id", "year", "duration"]
     df_songs = df_songs_artists[song_columns].copy()
     df_songs.to_csv(path, index = index)
     
@@ -141,10 +141,11 @@ def extract_and_transform():
     save_songplay_data(df_logs)
     print("saved songplay data")
 
-
-
-if __name__ == "__main__":
+def main():
     if not os.path.exists("../data/cleaned"):
         os.makedirs("../data/cleaned")
         
     extract_and_transform()
+
+if __name__ == "__main__":
+    main()

@@ -8,6 +8,9 @@ import psycopg2
 from psycopg2.extensions import register_adapter
 import sql_queries
 
+
+errors = []
+
 def connect_to_db(config_path = "../config.json"):
     """Tries to connect to a Postgres database
 
@@ -49,7 +52,10 @@ def fill_artist_table(cur, path = "../data/cleaned/artists.csv"):
     df_artist = pd.read_csv(path)
     df_artist.fillna(psycopg2.extensions.AsIs("NULL"), inplace = True)
     for index, row in df_artist.iterrows():
-        cur.execute(sql_queries.artist_table_insert, list(row.values))
+        try:
+            cur.execute(sql_queries.artist_table_insert, list(row.values))
+        except psycopg2.errors.NotNullViolation as e:
+            errors.append(e)
     
 def fill_song_table(cur, path = "../data/cleaned/songs.csv"):
     """Fills the song table of the Postgres database with the data in the csv file specified by the path
@@ -63,7 +69,14 @@ def fill_song_table(cur, path = "../data/cleaned/songs.csv"):
     df_songs = pd.read_csv(path)
     df_songs.fillna(psycopg2.extensions.AsIs("NULL"), inplace = True)
     for index, row in df_songs.iterrows():
-        cur.execute(sql_queries.song_table_insert, list(row.values))
+        try:
+            cur.execute(sql_queries.song_table_insert, list(row.values))
+        except psycopg2.errors.NotNullViolation as e:
+            errors.append(e)
+        except psycopg2.errors.ForeignKeyViolation as e:
+            errors.append(e)
+            
+            
 
 def fill_time_table(cur, path = "../data/cleaned/time.csv"):
     """Fills the time table of the Postgres database with the data in the csv file specified by the path
@@ -117,7 +130,12 @@ def fill_songplays_table(cur, path = "../data/cleaned/songplays.csv"):
 
         # insert songplay record
         songplay_data = (row["ts"], row["userId"], row["level"], songid, artistid, row["sessionId"], row["location"], row["userAgent"])
-        cur.execute(sql_queries.songplay_table_insert, songplay_data)
+        try:
+            cur.execute(sql_queries.songplay_table_insert, songplay_data)
+        except psycopg2.errors.UniqueViolation as e:
+            errors.append(e)
+        except psycopg2.errors.NotNullViolation as e:
+            errors.append(e)
 
 def load_pg():
     """The main function of loading data to Postgres
@@ -140,5 +158,14 @@ def load_pg():
     conn.close()
     print("Connection closed")
     
-if __name__ == "__main__":
+    # write the errors in a text file
+    if len(errors) > 0:
+        with open("../errors.txt", "w") as f:
+            for e in errors:
+                f.write(str(e))
+    
+
+def main():
     load_pg()
+if __name__ == "__main__":
+    main()
